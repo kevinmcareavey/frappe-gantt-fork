@@ -1038,6 +1038,7 @@ var Gantt = (function () {
                 language: 'en',
                 use_condensed_rows: false,
                 draw_labels: true,
+                show_today_highlight: true,
             };
             this.options = Object.assign({}, default_options, options);
         }
@@ -1276,7 +1277,9 @@ var Gantt = (function () {
             this.make_grid_rows(counter_rows);
             this.make_grid_header();
             this.make_grid_ticks();
-            this.make_grid_highlights();
+            if (this.options.show_today_highlight) {
+                this.make_grid_highlights();
+            }
         }
 
         make_grid_background(lenRows) {
