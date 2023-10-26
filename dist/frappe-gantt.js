@@ -451,7 +451,10 @@ var Gantt = (function () {
                 append_to: this.bar_group,
             });
 
-            animateSVG(this.$bar, 'width', 0, this.width);
+            // animateSVG(this.$bar, 'width', 0, this.width);
+            if (navigator.userAgent.indexOf("Firefox") === -1) {
+                animateSVG(this.$bar, 'width', 0, this.width);
+            }
 
             if (this.invalid) {
                 this.$bar.classList.add('bar-invalid');
@@ -471,7 +474,10 @@ var Gantt = (function () {
                 append_to: this.bar_group,
             });
 
-            animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
+            // animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
+            if (navigator.userAgent.indexOf("Firefox") === -1) {
+                animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
+            }
         }
 
         draw_label() {
