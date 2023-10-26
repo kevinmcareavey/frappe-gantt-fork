@@ -1024,6 +1024,7 @@ var Gantt = (function () {
                 popup_trigger: 'click',
                 custom_popup_html: null,
                 language: 'en',
+                use_condensed_rows: false,
             };
             this.options = Object.assign({}, default_options, options);
         }
@@ -1041,7 +1042,20 @@ var Gantt = (function () {
                 }
 
                 // cache index
-                task._index = i;
+                let useCondensedRows = false;
+                if (typeof this.options.use_condensed_rows !== typeof undefined) {
+                    useCondensedRows = this.options.use_condensed_rows;
+                }
+
+                if (useCondensedRows) {
+                    if (typeof task.row_index !== typeof undefined && typeof task.row_index === typeof 2) {
+                        task._index = task.row_index;
+                    } else {
+                        task._index = i;
+                    }
+                } else {
+                    task._index = i;
+                }
 
                 // invalid dates
                 if (!task.start && !task.end) {
@@ -1234,20 +1248,31 @@ var Gantt = (function () {
         }
 
         make_grid() {
-            this.make_grid_background();
-            this.make_grid_rows();
+            let useCondensedRows = false;
+            if (typeof this.options.use_condensed_rows !== typeof undefined) {
+                useCondensedRows = this.options.use_condensed_rows;
+            }
+            let counter_rows = -1;
+
+            if (useCondensedRows) {
+                const distinctRows = [...new Set(this.tasks.map(a => a.row_index))];
+                counter_rows = distinctRows.length;
+            }
+
+            this.make_grid_background(counter_rows);
+            this.make_grid_rows(counter_rows);
             this.make_grid_header();
             this.make_grid_ticks();
             this.make_grid_highlights();
         }
 
-        make_grid_background() {
+        make_grid_background(lenRows) {
             const grid_width = this.dates.length * this.options.column_width;
             const grid_height =
                 this.options.header_height +
                 this.options.padding +
                 (this.options.bar_height + this.options.padding) *
-                    this.tasks.length;
+                    (lenRows > -1 ? lenRows : this.tasks.length);
 
             createSVG('rect', {
                 x: 0,
@@ -1264,7 +1289,7 @@ var Gantt = (function () {
             });
         }
 
-        make_grid_rows() {
+        make_grid_rows(lenRows) {
             const rows_layer = createSVG('g', { append_to: this.layers.grid });
             const lines_layer = createSVG('g', { append_to: this.layers.grid });
 
@@ -1273,7 +1298,7 @@ var Gantt = (function () {
 
             let row_y = this.options.header_height + this.options.padding / 2;
 
-            for (let task of this.tasks) {
+            [...Array((lenRows > -1 ? lenRows : this.tasks.length))].forEach((e,i) => {
                 createSVG('rect', {
                     x: 0,
                     y: row_y,
@@ -1293,7 +1318,7 @@ var Gantt = (function () {
                 });
 
                 row_y += this.options.bar_height + this.options.padding;
-            }
+            });
         }
 
         make_grid_header() {
