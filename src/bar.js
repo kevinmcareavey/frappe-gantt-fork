@@ -72,7 +72,9 @@ export default class Bar {
         if (this.gantt.options.draw_labels){
             this.draw_label();
         }
-        this.draw_resize_handles();
+        if (this.task.resizable) {
+            this.draw_resize_handles();
+        }
     }
 
     draw_bar() {
@@ -248,7 +250,9 @@ export default class Bar {
         if (this.gantt.options.draw_labels){
             this.update_label_position();
         }
-        this.update_handle_position();
+        if (this.task.resizable){
+            this.update_handle_position();
+        }
         this.update_progressbar_position();
         this.update_arrow_position();
     }
