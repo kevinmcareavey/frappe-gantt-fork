@@ -69,7 +69,9 @@ export default class Bar {
     draw() {
         this.draw_bar();
         this.draw_progress_bar();
-        this.draw_label();
+        if (this.gantt.options.draw_labels){
+            this.draw_label();
+        }
         this.draw_resize_handles();
     }
 
@@ -243,7 +245,9 @@ export default class Bar {
         if (width && width >= this.gantt.options.column_width) {
             this.update_attr(bar, 'width', width);
         }
-        this.update_label_position();
+        if (this.gantt.options.draw_labels){
+            this.update_label_position();
+        }
         this.update_handle_position();
         this.update_progressbar_position();
         this.update_arrow_position();

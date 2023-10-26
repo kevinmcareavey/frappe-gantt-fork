@@ -435,7 +435,9 @@ var Gantt = (function () {
         draw() {
             this.draw_bar();
             this.draw_progress_bar();
-            this.draw_label();
+            if (this.gantt.options.draw_labels){
+                this.draw_label();
+            }
             this.draw_resize_handles();
         }
 
@@ -451,7 +453,6 @@ var Gantt = (function () {
                 append_to: this.bar_group,
             });
 
-            // animateSVG(this.$bar, 'width', 0, this.width);
             if (navigator.userAgent.indexOf("Firefox") === -1) {
                 animateSVG(this.$bar, 'width', 0, this.width);
             }
@@ -474,7 +475,6 @@ var Gantt = (function () {
                 append_to: this.bar_group,
             });
 
-            // animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
             if (navigator.userAgent.indexOf("Firefox") === -1) {
                 animateSVG(this.$bar_progress, 'width', 0, this.progress_width);
             }
@@ -611,7 +611,9 @@ var Gantt = (function () {
             if (width && width >= this.gantt.options.column_width) {
                 this.update_attr(bar, 'width', width);
             }
-            this.update_label_position();
+            if (this.gantt.options.draw_labels){
+                this.update_label_position();
+            }
             this.update_handle_position();
             this.update_progressbar_position();
             this.update_arrow_position();
@@ -1031,6 +1033,7 @@ var Gantt = (function () {
                 custom_popup_html: null,
                 language: 'en',
                 use_condensed_rows: false,
+                draw_labels: true,
             };
             this.options = Object.assign({}, default_options, options);
         }

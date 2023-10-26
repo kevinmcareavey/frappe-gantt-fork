@@ -89,6 +89,7 @@ export default class Gantt {
             custom_popup_html: null,
             language: 'en',
             use_condensed_rows: false,
+            draw_labels: true,
         };
         this.options = Object.assign({}, default_options, options);
     }
